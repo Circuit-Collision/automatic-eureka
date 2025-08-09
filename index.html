@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PP Games - Unblocked Gaming Hub</title>
+    <title>PP games - Unblocked Gaming Hub</title>
     <style>
         * {
             margin: 0;
@@ -553,6 +553,7 @@
                 <li><a href="#games">Games</a></li>
                 <li><a href="#favorites">Favorites</a></li>
                 <li><a href="#new">New</a></li>
+                <li><a href="#roblox" onclick="openRobloxPlayer()">🎮 Roblox</a></li>
                 <li class="admin-only" style="display: none;"><a href="#admin" onclick="openAdminPanel()">Admin Panel</a></li>
                 <li class="admin-only" style="display: none;"><a href="#proxy" onclick="openProxyBrowser()">Proxy Browser</a></li>
             </ul>
@@ -651,6 +652,128 @@
                     Already have an account? <a href="#" onclick="switchToLogin()">Login</a>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Roblox Player Modal -->
+    <div class="modal" id="robloxModal">
+        <div class="modal-content" style="min-width: 95vw; min-height: 95vh; max-width: 98vw; max-height: 98vh; padding: 0; overflow: hidden; background: linear-gradient(135deg, rgba(0, 162, 255, 0.1), rgba(0, 102, 204, 0.1));">
+            <!-- Roblox Header -->
+            <div style="background: linear-gradient(135deg, #00a2ff, #0066cc); padding: 15px; color: white; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0066cc;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="background: white; color: #00a2ff; padding: 8px 12px; border-radius: 8px; font-weight: bold; font-size: 1.2em;">R</div>
+                    <h2 style="margin: 0; font-size: 1.5em;">Roblox Player</h2>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div id="robloxStatus" style="background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 15px; font-size: 0.9em;">
+                        🟢 Ready to Play
+                    </div>
+                    <button onclick="toggleRobloxFullscreen()" style="background: rgba(255, 255, 255, 0.2); border: none; color: white; padding: 8px 12px; border-radius: 5px; cursor: pointer;">⛶</button>
+                    <button class="close-btn" onclick="closeRobloxPlayer()" style="position: static; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50%; width: 35px; height: 35px;">&times;</button>
+                </div>
+            </div>
+
+            <!-- Roblox Navigation -->
+            <div style="background: rgba(0, 162, 255, 0.05); padding: 10px 20px; border-bottom: 1px solid rgba(0, 162, 255, 0.2); display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                <button onclick="loadRobloxHome()" style="background: linear-gradient(45deg, #00a2ff, #0066cc); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold;">🏠 Home</button>
+                <button onclick="loadRobloxGames()" style="background: rgba(0, 162, 255, 0.2); color: #00a2ff; border: 1px solid #00a2ff; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold;">🎮 Games</button>
+                <button onclick="loadRobloxCreate()" style="background: rgba(0, 162, 255, 0.2); color: #00a2ff; border: 1px solid #00a2ff; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold;">🛠️ Create</button>
+                <button onclick="loadRobloxRobux()" style="background: rgba(0, 162, 255, 0.2); color: #00a2ff; border: 1px solid #00a2ff; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold;">💎 Robux</button>
+                
+                <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
+                    <input type="text" id="robloxSearch" placeholder="Search games or players..." style="flex: 1; max-width: 300px; padding: 8px 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(0, 162, 255, 0.3); border-radius: 20px; color: #333; font-size: 14px;" onkeypress="handleRobloxSearch(event)">
+                    <button onclick="searchRoblox()" style="background: #00a2ff; color: white; border: none; padding: 8px 12px; border-radius: 15px; cursor: pointer;">🔍</button>
+                </div>
+
+                <button onclick="openRobloxSettings()" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: #00a2ff; padding: 8px 12px; border-radius: 5px; cursor: pointer;">⚙️</button>
+            </div>
+
+            <!-- Roblox Content Area -->
+            <div id="robloxContent" style="height: calc(100% - 120px); position: relative; background: #f8f9fa;">
+                <!-- Welcome Screen -->
+                <div id="robloxWelcome" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10;">
+                    <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); max-width: 500px;">
+                        <div style="font-size: 4em; margin-bottom: 20px;">🎮</div>
+                        <h2 style="color: #00a2ff; margin-bottom: 15px; font-size: 2em;">Welcome to Roblox!</h2>
+                        <p style="color: #666; margin-bottom: 25px; line-height: 1.6;">Experience millions of games created by players worldwide. Build, play, and explore in the ultimate virtual universe.</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                            <button onclick="playPopularGame('Adopt Me')" style="background: linear-gradient(45deg, #ff6b9d, #c44569); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">🐾 Adopt Me!</button>
+                            <button onclick="playPopularGame('Brookhaven')" style="background: linear-gradient(45deg, #4834d4, #686de0); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">🏘️ Brookhaven RP</button>
+                            <button onclick="playPopularGame('Arsenal')" style="background: linear-gradient(45deg, #ff9ff3, #f368e0); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">🔫 Arsenal</button>
+                            <button onclick="playPopularGame('Tower of Hell')" style="background: linear-gradient(45deg, #ff3838, #ff6b6b); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">🗼 Tower of Hell</button>
+                        </div>
+                        
+                        <button onclick="loadRobloxGames()" style="background: linear-gradient(45deg, #00a2ff, #0066cc); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 1.1em;">Browse All Games</button>
+                    </div>
+                </div>
+
+                <!-- Game Frame -->
+                <iframe id="robloxFrame" style="width: 100%; height: 100%; border: none; display: none; background: white;"></iframe>
+                
+                <!-- Game Grid -->
+                <div id="robloxGameGrid" style="display: none; padding: 20px; height: 100%; overflow-y: auto;">
+                    <!-- Games will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Roblox Settings Modal -->
+    <div class="modal" id="robloxSettingsModal">
+        <div class="modal-content" style="min-width: 500px;">
+            <button class="close-btn" onclick="closeRobloxSettings()">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title" style="color: #00a2ff;">🎮 Roblox Settings</h2>
+                <p>Configure your Roblox experience</p>
+            </div>
+            
+            <div style="display: grid; gap: 20px;">
+                <div>
+                    <label class="form-label">Graphics Quality</label>
+                    <select class="form-input" id="robloxGraphics">
+                        <option value="1">Low (1)</option>
+                        <option value="5">Medium (5)</option>
+                        <option value="10" selected>High (10)</option>
+                        <option value="21">Ultra (21)</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="form-label">Volume</label>
+                    <input type="range" min="0" max="100" value="50" id="robloxVolume" style="width: 100%;">
+                    <div style="text-align: center; color: rgba(255, 255, 255, 0.7); margin-top: 5px;" id="volumeDisplay">50%</div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="robloxFullscreen" style="width: auto;">
+                    <label for="robloxFullscreen" style="color: rgba(255, 255, 255, 0.8);">Start games in fullscreen</label>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="robloxChat" checked style="width: auto;">
+                    <label for="robloxChat" style="color: rgba(255, 255, 255, 0.8);">Enable in-game chat</label>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="robloxSafety" checked style="width: auto;">
+                    <label for="robloxSafety" style="color: rgba(255, 255, 255, 0.8);">Enable safety features</label>
+                </div>
+                
+                <div>
+                    <label class="form-label">Preferred Server Region</label>
+                    <select class="form-input" id="robloxRegion">
+                        <option value="auto">Auto-detect</option>
+                        <option value="us-east">US East</option>
+                        <option value="us-west">US West</option>
+                        <option value="eu">Europe</option>
+                        <option value="asia">Asia</option>
+                    </select>
+                </div>
+                
+                <button class="form-button" onclick="saveRobloxSettings()">Save Settings</button>
+            </div>
         </div>
     </div>
 
@@ -829,7 +952,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <p>&copy; pp games. Unblock your potential.</p>
+            <p>&copy; PP games. Unblock your potential.</p>
         </div>
     </footer>
 
@@ -1454,6 +1577,252 @@
             }
         });
 
+        // Roblox Player Functions
+        let robloxSettings = {
+            graphics: 10,
+            volume: 50,
+            fullscreen: false,
+            chat: true,
+            safety: true,
+            region: 'auto'
+        };
+
+        function openRobloxPlayer() {
+            if (!currentUser) {
+                showNotification('Please log in to access Roblox', 'error');
+                openModal('login');
+                return;
+            }
+            document.getElementById('robloxModal').style.display = 'block';
+            loadRobloxSettings();
+            updateRobloxStatus('Ready to Play', '🟢');
+        }
+
+        function closeRobloxPlayer() {
+            document.getElementById('robloxModal').style.display = 'none';
+            // Clear iframe for performance
+            document.getElementById('robloxFrame').src = 'about:blank';
+            document.getElementById('robloxFrame').style.display = 'none';
+            document.getElementById('robloxWelcome').style.display = 'block';
+            document.getElementById('robloxGameGrid').style.display = 'none';
+        }
+
+        function loadRobloxSettings() {
+            const saved = localStorage.getItem('robloxSettings');
+            if (saved) {
+                robloxSettings = { ...robloxSettings, ...JSON.parse(saved) };
+            }
+        }
+
+        function updateRobloxStatus(message, emoji = '🟢') {
+            document.getElementById('robloxStatus').innerHTML = `${emoji} ${message}`;
+        }
+
+        function loadRobloxHome() {
+            document.getElementById('robloxWelcome').style.display = 'block';
+            document.getElementById('robloxFrame').style.display = 'none';
+            document.getElementById('robloxGameGrid').style.display = 'none';
+            updateRobloxStatus('Home', '🏠');
+        }
+
+        function loadRobloxGames() {
+            document.getElementById('robloxWelcome').style.display = 'none';
+            document.getElementById('robloxFrame').style.display = 'none';
+            document.getElementById('robloxGameGrid').style.display = 'block';
+            
+            const gameGrid = document.getElementById('robloxGameGrid');
+            gameGrid.innerHTML = `
+                <h2 style="color: #00a2ff; margin-bottom: 20px; text-align: center;">Popular Roblox Games</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+                    ${generateRobloxGameCards()}
+                </div>
+            `;
+            updateRobloxStatus('Browsing Games', '🎮');
+        }
+
+        function generateRobloxGameCards() {
+            const games = [
+                { name: 'Adopt Me!', players: '200K+', icon: '🐾', description: 'Adopt pets, decorate your home, and play with friends!' },
+                { name: 'Brookhaven RP', players: '150K+', icon: '🏘️', description: 'Roleplay in the town of Brookhaven with friends!' },
+                { name: 'Arsenal', players: '80K+', icon: '🔫', description: 'Fast-paced FPS with unique weapons and maps!' },
+                { name: 'Tower of Hell', players: '60K+', icon: '🗼', description: 'Climb the tower and reach the top!' },
+                { name: 'Murder Mystery 2', players: '50K+', icon: '🔍', description: 'Find clues to solve the mystery!' },
+                { name: 'Jailbreak', players: '45K+', icon: '🚔', description: 'Escape prison or stop criminals as police!' },
+                { name: 'MeepCity', players: '40K+', icon: '🏠', description: 'Customize your estate and party with friends!' },
+                { name: 'Natural Disaster Survival', players: '35K+', icon: '🌪️', description: 'Survive various natural disasters!' },
+                { name: 'Work at a Pizza Place', players: '30K+', icon: '🍕', description: 'Work together to run a pizza restaurant!' },
+                { name: 'Piggy', players: '25K+', icon: '🐷', description: 'Escape or hunt in this thrilling horror game!' },
+                { name: 'Bloxburg', players: '20K+', icon: '🏡', description: 'Build and design your dream house!' },
+                { name: 'Phantom Forces', players: '18K+', icon: '⚔️', description: 'Tactical FPS with realistic weapons!' }
+            ];
+
+            return games.map(game => `
+                <div onclick="playRobloxGame('${game.name}')" style="background: white; border-radius: 15px; padding: 20px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border: 2px solid transparent;">
+                    <div style="font-size: 3em; text-align: center; margin-bottom: 15px;">${game.icon}</div>
+                    <h3 style="color: #00a2ff; margin-bottom: 8px; text-align: center; font-size: 1.2em;">${game.name}</h3>
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 10px; text-align: center; line-height: 1.4;">${game.description}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                        <span style="background: #e8f4fd; color: #00a2ff; padding: 4px 12px; border-radius: 15px; font-size: 0.8em; font-weight: bold;">${game.players} playing</span>
+                        <button onclick="event.stopPropagation(); playRobloxGame('${game.name}')" style="background: linear-gradient(45deg, #00a2ff, #0066cc); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold;">▶ Play</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function playRobloxGame(gameName) {
+            updateRobloxStatus(`Loading ${gameName}...`, '⏳');
+            
+            document.getElementById('robloxWelcome').style.display = 'none';
+            document.getElementById('robloxGameGrid').style.display = 'none';
+            document.getElementById('robloxFrame').style.display = 'block';
+            
+            // Simulate game loading
+            setTimeout(() => {
+                // Use embedded Roblox game URLs or alternatives
+                const gameUrls = {
+                    'Adopt Me!': 'https://www.roblox.com/games/920587237/Adopt-Me',
+                    'Brookhaven RP': 'https://www.roblox.com/games/4924922222/Brookhaven-RP',
+                    'Arsenal': 'https://www.roblox.com/games/286090429/Arsenal',
+                    'Tower of Hell': 'https://www.roblox.com/games/1962086868/Tower-of-Hell',
+                    'Murder Mystery 2': 'https://www.roblox.com/games/142823291/Murder-Mystery-2',
+                    'Jailbreak': 'https://www.roblox.com/games/606849621/Jailbreak',
+                    'MeepCity': 'https://www.roblox.com/games/370731277/MeepCity',
+                    'Natural Disaster Survival': 'https://www.roblox.com/games/189707/Natural-Disaster-Survival',
+                    'Work at a Pizza Place': 'https://www.roblox.com/games/192800/Work-at-a-Pizza-Place',
+                    'Piggy': 'https://www.roblox.com/games/4623386862/Piggy-Book-2',
+                    'Bloxburg': 'https://www.roblox.com/games/185655149/Welcome-to-Bloxburg',
+                    'Phantom Forces': 'https://www.roblox.com/games/292439477/Phantom-Forces'
+                };
+
+                const gameUrl = gameUrls[gameName] || 'https://www.roblox.com/games/';
+                
+                // Load through a proxy that supports Roblox
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(gameUrl)}`;
+                document.getElementById('robloxFrame').src = proxyUrl;
+                
+                updateRobloxStatus(`Playing ${gameName}`, '🎮');
+                showNotification(`Loading ${gameName}...`, 'info');
+            }, 1000);
+        }
+
+        function playPopularGame(gameName) {
+            playRobloxGame(gameName);
+        }
+
+        function loadRobloxCreate() {
+            document.getElementById('robloxWelcome').style.display = 'none';
+            document.getElementById('robloxGameGrid').style.display = 'none';
+            document.getElementById('robloxFrame').style.display = 'block';
+            
+            // Load Roblox Studio web version
+            const createUrl = 'https://create.roblox.com/';
+            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(createUrl)}`;
+            document.getElementById('robloxFrame').src = proxyUrl;
+            
+            updateRobloxStatus('Roblox Studio', '🛠️');
+        }
+
+        function loadRobloxRobux() {
+            document.getElementById('robloxWelcome').style.display = 'none';
+            document.getElementById('robloxGameGrid').style.display = 'none';
+            document.getElementById('robloxFrame').style.display = 'block';
+            
+            // Load Robux page
+            const robuxUrl = 'https://www.roblox.com/robux';
+            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(robuxUrl)}`;
+            document.getElementById('robloxFrame').src = proxyUrl;
+            
+            updateRobloxStatus('Robux Store', '💎');
+        }
+
+        function handleRobloxSearch(event) {
+            if (event.key === 'Enter') {
+                searchRoblox();
+            }
+        }
+
+        function searchRoblox() {
+            const query = document.getElementById('robloxSearch').value.trim();
+            if (!query) return;
+
+            updateRobloxStatus(`Searching: ${query}`, '🔍');
+            
+            document.getElementById('robloxWelcome').style.display = 'none';
+            document.getElementById('robloxGameGrid').style.display = 'none';
+            document.getElementById('robloxFrame').style.display = 'block';
+            
+            // Search on Roblox
+            const searchUrl = `https://www.roblox.com/search/games?keyword=${encodeURIComponent(query)}`;
+            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(searchUrl)}`;
+            document.getElementById('robloxFrame').src = proxyUrl;
+        }
+
+        function toggleRobloxFullscreen() {
+            const modal = document.getElementById('robloxModal');
+            const modalContent = modal.querySelector('.modal-content');
+            
+            if (modalContent.style.position === 'fixed') {
+                modalContent.style.position = 'static';
+                modalContent.style.minWidth = '95vw';
+                modalContent.style.minHeight = '95vh';
+            } else {
+                modalContent.style.position = 'fixed';
+                modalContent.style.top = '0';
+                modalContent.style.left = '0';
+                modalContent.style.width = '100vw';
+                modalContent.style.height = '100vh';
+                modalContent.style.minWidth = '100vw';
+                modalContent.style.minHeight = '100vh';
+                modalContent.style.zIndex = '10001';
+            }
+        }
+
+        function openRobloxSettings() {
+            document.getElementById('robloxSettingsModal').style.display = 'block';
+            
+            // Load current settings
+            document.getElementById('robloxGraphics').value = robloxSettings.graphics;
+            document.getElementById('robloxVolume').value = robloxSettings.volume;
+            document.getElementById('robloxFullscreen').checked = robloxSettings.fullscreen;
+            document.getElementById('robloxChat').checked = robloxSettings.chat;
+            document.getElementById('robloxSafety').checked = robloxSettings.safety;
+            document.getElementById('robloxRegion').value = robloxSettings.region;
+            
+            updateVolumeDisplay();
+        }
+
+        function closeRobloxSettings() {
+            document.getElementById('robloxSettingsModal').style.display = 'none';
+        }
+
+        function updateVolumeDisplay() {
+            const volume = document.getElementById('robloxVolume').value;
+            document.getElementById('volumeDisplay').textContent = volume + '%';
+        }
+
+        function saveRobloxSettings() {
+            robloxSettings = {
+                graphics: document.getElementById('robloxGraphics').value,
+                volume: document.getElementById('robloxVolume').value,
+                fullscreen: document.getElementById('robloxFullscreen').checked,
+                chat: document.getElementById('robloxChat').checked,
+                safety: document.getElementById('robloxSafety').checked,
+                region: document.getElementById('robloxRegion').value
+            };
+            
+            localStorage.setItem('robloxSettings', JSON.stringify(robloxSettings));
+            closeRobloxSettings();
+            showNotification('Roblox settings saved', 'success');
+        }
+
+        // Add volume slider event listener
+        document.addEventListener('DOMContentLoaded', function() {
+            const volumeSlider = document.getElementById('robloxVolume');
+            if (volumeSlider) {
+                volumeSlider.addEventListener('input', updateVolumeDisplay);
+            }
+        });
+
         function playGame(gameName) {
             showNotification(`Loading ${gameName}...`, 'info');
             // Here you would implement actual game loading
@@ -1491,6 +1860,8 @@
             const adminModal = document.getElementById('adminModal');
             const proxyModal = document.getElementById('proxyModal');
             const proxySettingsModal = document.getElementById('proxySettingsModal');
+            const robloxModal = document.getElementById('robloxModal');
+            const robloxSettingsModal = document.getElementById('robloxSettingsModal');
             
             if (event.target === authModal) {
                 closeModal();
@@ -1503,6 +1874,12 @@
             }
             if (event.target === proxySettingsModal) {
                 closeProxySettings();
+            }
+            if (event.target === robloxModal) {
+                closeRobloxPlayer();
+            }
+            if (event.target === robloxSettingsModal) {
+                closeRobloxSettings();
             }
         });
 
