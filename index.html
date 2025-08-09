@@ -343,7 +343,7 @@
             font-size: 0.9em;
         }
 
-        /* Auth Modal */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -368,6 +368,8 @@
             border: 1px solid rgba(102, 126, 234, 0.3);
             min-width: 400px;
             max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-header {
@@ -547,7 +549,7 @@
     <!-- Header -->
     <header class="header">
         <nav class="nav-container">
-            <div class="logo">NEXUS</div>
+            <div class="logo">PP games</div>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#games">Games</a></li>
@@ -583,7 +585,7 @@
 
         <!-- Guest Message -->
         <div class="guest-message" id="guestMessage">
-            <h2>🚀 Welcome to Nexus Games</h2>
+            <h2>🚀 Welcome to PP Games</h2>
             <p>Join our community to access hundreds of unblocked games, save your favorites, and compete with friends!</p>
             <button class="btn-signup" onclick="openModal('signup')">Create Free Account</button>
         </div>
@@ -657,7 +659,7 @@
 
     <!-- Roblox Player Modal -->
     <div class="modal" id="robloxModal">
-        <div class="modal-content" style="min-width: 95vw; min-height: 95vh; max-width: 98vw; max-height: 98vh; padding: 0; overflow: hidden; background: linear-gradient(135deg, rgba(0, 162, 255, 0.1), rgba(0, 102, 204, 0.1));">
+        <div class="modal-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 95vw; min-height: 95vh; max-width: 98vw; max-height: 98vh; padding: 0; overflow: hidden; background: linear-gradient(135deg, rgba(0, 162, 255, 0.1), rgba(0, 102, 204, 0.1));">
             <!-- Roblox Header -->
             <div style="background: linear-gradient(135deg, #00a2ff, #0066cc); padding: 15px; color: white; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0066cc;">
                 <div style="display: flex; align-items: center; gap: 15px;">
@@ -803,7 +805,7 @@
                 <iframe id="proxyFrame" style="width: 100%; height: 100%; border: none; background: white;"></iframe>
                 <div id="proxyWelcome" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #333;">
                     <div style="font-size: 3em; margin-bottom: 20px;">🌐</div>
-                    <h2 style="color: #667eea; margin-bottom: 15px;">Nexus Proxy Browser</h2>
+                    <h2 style="color: #667eea; margin-bottom: 15px;">Proxy Browser</h2>
                     <p style="color: #666; margin-bottom: 25px;">Browse the web securely through our proxy service</p>
                     <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
                         <button onclick="quickProxy('google.com')" style="background: #4285f4; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer;">Google</button>
@@ -812,7 +814,7 @@
                         <button onclick="quickProxy('reddit.com')" style="background: #ff4500; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer;">Reddit</button>
                         <button onclick="quickProxy('stackoverflow.com')" style="background: #f48024; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer;">Stack Overflow</button>
                     </div>
-                    <p style="color: #999; font-size: 0.9em;">⚠️ This proxy browser allows you to access external websites securely</p>
+                    <p style="color: #999; font-size: 0.9em;">⚠️ This proxy browser allows you to access external websites securely through PPexpress Browser</p>
                 </div>
             </div>
         </div>
@@ -952,7 +954,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <p>&copy; PP games. Unblock your potential.</p>
+            <p>&copy; PP games Unblock your potential.</p>
         </div>
     </footer>
 
@@ -1095,10 +1097,10 @@
                 if (isFirstUser) {
                     showNotification('Account created! You are now the Admin 👑', 'success');
                 } else {
-                    showNotification('Account created successfully! 🚀', 'success');
+                    showNotification('Account created successfully! PPlay safely user! 🚀', 'success');
                 }
             } else {
-                showNotification('Please fill in all fields', 'error');
+                showNotification('Please fill in all fields to begin PPlaying', 'error');
             }
         }
 
@@ -1106,7 +1108,7 @@
             currentUser = null;
             localStorage.removeItem('nexusUser');
             showLoggedOutState();
-            showNotification('Logged out successfully', 'info');
+            showNotification('Logged out successfully. see you soon!', 'info');
         }
 
         function showLoggedInState() {
@@ -1507,20 +1509,28 @@
 
         function toggleFullscreen() {
             const modal = document.getElementById('proxyModal');
-            if (modal.style.position === 'fixed') {
-                modal.style.position = 'absolute';
-                modal.style.top = '0';
-                modal.style.left = '0';
-                modal.style.width = '100vw';
-                modal.style.height = '100vh';
-                modal.style.zIndex = '10000';
+            const modalContent = modal.querySelector('.modal-content');
+            
+            if (modalContent.dataset.fullscreen === 'true') {
+                // Exit fullscreen
+                modalContent.style.position = 'absolute';
+                modalContent.style.top = '50%';
+                modalContent.style.left = '50%';
+                modalContent.style.transform = 'translate(-50%, -50%)';
+                modalContent.style.width = '90vw';
+                modalContent.style.height = '90vh';
+                modalContent.style.zIndex = '';
+                modalContent.dataset.fullscreen = 'false';
             } else {
-                modal.style.position = 'fixed';
-                modal.style.top = '50%';
-                modal.style.left = '50%';
-                modal.style.transform = 'translate(-50%, -50%)';
-                modal.style.width = '90vw';
-                modal.style.height = '90vh';
+                // Enter fullscreen
+                modalContent.style.position = 'fixed';
+                modalContent.style.top = '0';
+                modalContent.style.left = '0';
+                modalContent.style.transform = 'none';
+                modalContent.style.width = '100vw';
+                modalContent.style.height = '100vh';
+                modalContent.style.zIndex = '10001';
+                modalContent.dataset.fullscreen = 'true';
             }
         }
 
@@ -1676,33 +1686,63 @@
             document.getElementById('robloxGameGrid').style.display = 'none';
             document.getElementById('robloxFrame').style.display = 'block';
             
-            // Simulate game loading
-            setTimeout(() => {
-                // Use embedded Roblox game URLs or alternatives
-                const gameUrls = {
-                    'Adopt Me!': 'https://www.roblox.com/games/920587237/Adopt-Me',
-                    'Brookhaven RP': 'https://www.roblox.com/games/4924922222/Brookhaven-RP',
-                    'Arsenal': 'https://www.roblox.com/games/286090429/Arsenal',
-                    'Tower of Hell': 'https://www.roblox.com/games/1962086868/Tower-of-Hell',
-                    'Murder Mystery 2': 'https://www.roblox.com/games/142823291/Murder-Mystery-2',
-                    'Jailbreak': 'https://www.roblox.com/games/606849621/Jailbreak',
-                    'MeepCity': 'https://www.roblox.com/games/370731277/MeepCity',
-                    'Natural Disaster Survival': 'https://www.roblox.com/games/189707/Natural-Disaster-Survival',
-                    'Work at a Pizza Place': 'https://www.roblox.com/games/192800/Work-at-a-Pizza-Place',
-                    'Piggy': 'https://www.roblox.com/games/4623386862/Piggy-Book-2',
-                    'Bloxburg': 'https://www.roblox.com/games/185655149/Welcome-to-Bloxburg',
-                    'Phantom Forces': 'https://www.roblox.com/games/292439477/Phantom-Forces'
-                };
-
-                const gameUrl = gameUrls[gameName] || 'https://www.roblox.com/games/';
-                
-                // Load through a proxy that supports Roblox
-                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(gameUrl)}`;
-                document.getElementById('robloxFrame').src = proxyUrl;
-                
+            // Use working game alternatives and proxies
+            let gameUrl;
+            
+            switch(gameName) {
+                case 'Adopt Me!':
+                    gameUrl = 'https://now.gg/play/roblox-corporation/2349/adopt-me';
+                    break;
+                case 'Brookhaven RP':
+                    gameUrl = 'https://now.gg/play/roblox-corporation/2349/brookhaven-rp';
+                    break;
+                case 'Arsenal':
+                    gameUrl = 'https://now.gg/play/roblox-corporation/2349/arsenal';
+                    break;
+                case 'Tower of Hell':
+                    gameUrl = 'https://now.gg/play/roblox-corporation/2349/tower-of-hell';
+                    break;
+                case 'Murder Mystery 2':
+                    gameUrl = 'https://poki.com/en/g/murder-mystery-2';
+                    break;
+                case 'Jailbreak':
+                    gameUrl = 'https://now.gg/play/roblox-corporation/2349/jailbreak';
+                    break;
+                case 'MeepCity':
+                    gameUrl = 'https://now.gg/play/roblox-corporation/2349/meepcity';
+                    break;
+                case 'Natural Disaster Survival':
+                    gameUrl = 'https://poki.com/en/g/natural-disaster-survival';
+                    break;
+                case 'Work at a Pizza Place':
+                    gameUrl = 'https://now.gg/play/roblox-corporation/2349/work-at-a-pizza-place';
+                    break;
+                case 'Piggy':
+                    gameUrl = 'https://now.gg/play/roblox-corporation/2349/piggy';
+                    break;
+                case 'Bloxburg':
+                    gameUrl = 'https://now.gg/play/roblox-corporation/2349/welcome-to-bloxburg';
+                    break;
+                case 'Phantom Forces':
+                    gameUrl = 'https://now.gg/play/roblox-corporation/2349/phantom-forces';
+                    break;
+                default:
+                    // Fallback to a working Roblox clone/alternative
+                    gameUrl = 'https://roblox.gg/';
+            }
+            
+            // Try direct loading first
+            try {
+                document.getElementById('robloxFrame').src = gameUrl;
                 updateRobloxStatus(`Playing ${gameName}`, '🎮');
                 showNotification(`Loading ${gameName}...`, 'info');
-            }, 1000);
+            } catch (error) {
+                // Fallback to proxy if direct loading fails
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(gameUrl)}`;
+                document.getElementById('robloxFrame').src = proxyUrl;
+                updateRobloxStatus(`Playing ${gameName} (via proxy)`, '🎮');
+                showNotification(`Loading ${gameName} through proxy...`, 'info');
+            }
         }
 
         function playPopularGame(gameName) {
@@ -1714,10 +1754,9 @@
             document.getElementById('robloxGameGrid').style.display = 'none';
             document.getElementById('robloxFrame').style.display = 'block';
             
-            // Load Roblox Studio web version
-            const createUrl = 'https://create.roblox.com/';
-            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(createUrl)}`;
-            document.getElementById('robloxFrame').src = proxyUrl;
+            // Load a working Roblox Studio alternative
+            const createUrl = 'https://web.roblox.com/develop';
+            document.getElementById('robloxFrame').src = createUrl;
             
             updateRobloxStatus('Roblox Studio', '🛠️');
         }
@@ -1728,9 +1767,8 @@
             document.getElementById('robloxFrame').style.display = 'block';
             
             // Load Robux page
-            const robuxUrl = 'https://www.roblox.com/robux';
-            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(robuxUrl)}`;
-            document.getElementById('robloxFrame').src = proxyUrl;
+            const robuxUrl = 'https://web.roblox.com/robux';
+            document.getElementById('robloxFrame').src = robuxUrl;
             
             updateRobloxStatus('Robux Store', '💎');
         }
@@ -1751,29 +1789,52 @@
             document.getElementById('robloxGameGrid').style.display = 'none';
             document.getElementById('robloxFrame').style.display = 'block';
             
-            // Search on Roblox
-            const searchUrl = `https://www.roblox.com/search/games?keyword=${encodeURIComponent(query)}`;
-            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(searchUrl)}`;
-            document.getElementById('robloxFrame').src = proxyUrl;
+            // Search alternatives that work
+            let searchUrl;
+            
+            // Try different search approaches
+            if (query.toLowerCase().includes('roblox')) {
+                searchUrl = `https://web.roblox.com/search/games?keyword=${encodeURIComponent(query.replace('roblox', '').trim())}`;
+            } else {
+                // Use alternative gaming search
+                searchUrl = `https://www.crazygames.com/search?query=${encodeURIComponent(query + ' roblox')}`;
+            }
+            
+            document.getElementById('robloxFrame').src = searchUrl;
         }
 
         function toggleRobloxFullscreen() {
             const modal = document.getElementById('robloxModal');
             const modalContent = modal.querySelector('.modal-content');
             
-            if (modalContent.style.position === 'fixed') {
-                modalContent.style.position = 'static';
+            if (modalContent.dataset.fullscreen === 'true') {
+                // Exit fullscreen
+                modalContent.style.position = 'absolute';
+                modalContent.style.top = '50%';
+                modalContent.style.left = '50%';
+                modalContent.style.transform = 'translate(-50%, -50%)';
+                modalContent.style.width = '';
+                modalContent.style.height = '';
                 modalContent.style.minWidth = '95vw';
                 modalContent.style.minHeight = '95vh';
+                modalContent.style.maxWidth = '98vw';
+                modalContent.style.maxHeight = '98vh';
+                modalContent.style.zIndex = '';
+                modalContent.dataset.fullscreen = 'false';
             } else {
+                // Enter fullscreen
                 modalContent.style.position = 'fixed';
                 modalContent.style.top = '0';
                 modalContent.style.left = '0';
+                modalContent.style.transform = 'none';
                 modalContent.style.width = '100vw';
                 modalContent.style.height = '100vh';
                 modalContent.style.minWidth = '100vw';
                 modalContent.style.minHeight = '100vh';
+                modalContent.style.maxWidth = '100vw';
+                modalContent.style.maxHeight = '100vh';
                 modalContent.style.zIndex = '10001';
+                modalContent.dataset.fullscreen = 'true';
             }
         }
 
